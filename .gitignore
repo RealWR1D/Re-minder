@@ -1,4 +1,15 @@
 .tools/
+# Design documents and prototypes are local-only, including future additions.
+design/
+designs/
+*设计*
+*实现方案*
+*验收记录*
+design-*.md
+*-design.md
+*.design.md
+*-implementation-plan.md
+*-acceptance-report.md
 artifacts/qa-*/
 artifacts/ReMinder-win-x64/
 artifacts/*.zip
