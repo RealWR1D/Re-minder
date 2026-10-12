@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <Version>0.1.0</Version>
+    <Company>Re:minder</Company>
+    <Product>Re:minder</Product>
+    <Authors>Re:minder</Authors>
+  </PropertyGroup>
+</Project>

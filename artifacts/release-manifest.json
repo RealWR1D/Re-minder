@@ -1,0 +1,11 @@
+{
+  "domainChecksPassed": 14,
+  "archive": "ReMinder-0.1.0-win-x64.zip",
+  "windowsBuild": "26300",
+  "dpi": 120,
+  "generatedUtc": "2026-10-12T11:35:46.5166625+00:00",
+  "sha256": "fa6740614852c4afc6ef147786935d45ab9b5274ea6a45da64f9222182548ed4",
+  "bytes": 129198086,
+  "target": "Windows x64",
+  "version": "0.1.0"
+}

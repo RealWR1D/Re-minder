@@ -1,0 +1,1 @@
+<Solution><Folder Name="/src/"><Project Path="src/ReMinder.Domain/ReMinder.Domain.csproj"/><Project Path="src/ReMinder.App/ReMinder.App.csproj"/></Folder><Folder Name="/tests/"><Project Path="tests/ReMinder.Checks/ReMinder.Checks.csproj"/></Folder></Solution>

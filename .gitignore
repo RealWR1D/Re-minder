@@ -1,0 +1,12 @@
+.tools/
+artifacts/qa-*/
+artifacts/ReMinder-win-x64/
+artifacts/*.zip
+**/bin/
+**/obj/
+artifacts/test-data/
+artifacts/qa-data/
+artifacts/logs/
+.vs/
+*.user
+*.suo

@@ -1,0 +1,12 @@
+global using System;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using System.Windows;
+global using System.Windows.Controls;
+global using System.Windows.Media;
+global using ReMinder.Domain;
+global using TaskStatus = ReMinder.Domain.TaskStatus;
+global using Validation = ReMinder.Domain.Validation;

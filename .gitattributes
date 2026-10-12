@@ -1,0 +1,4 @@
+* text=auto
+*.md whitespace=-blank-at-eol
+*.png -text
+*.ico -text
