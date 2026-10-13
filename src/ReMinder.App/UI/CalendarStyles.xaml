@@ -1,0 +1,94 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:ReMinder.App.UI">
+  <Style x:Key="MaterialDay" TargetType="CalendarDayButton">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/><Setter Property="local:Motion.Interactive" Value="True"/><Setter Property="local:CalendarMotion.Enabled" Value="True"/>
+    <Setter Property="Width" Value="40"/><Setter Property="Height" Value="40"/><Setter Property="Margin" Value="2"/><Setter Property="FontSize" Value="{DynamicResource BodySize}"/><Setter Property="Foreground" Value="{DynamicResource Primary}"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CalendarDayButton">
+      <Grid x:Name="StateRoot" Background="Transparent">
+        <VisualStateManager.VisualStateGroups>
+          <VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal"/><VisualState x:Name="MouseOver"/><VisualState x:Name="Pressed"/><VisualState x:Name="Disabled"/></VisualStateGroup>
+          <VisualStateGroup x:Name="SelectionStates"><VisualState x:Name="Selected"/><VisualState x:Name="Unselected"/></VisualStateGroup>
+          <VisualStateGroup x:Name="ActiveStates"><VisualState x:Name="Active"/><VisualState x:Name="Inactive"/></VisualStateGroup>
+          <VisualStateGroup x:Name="DayStates"><VisualState x:Name="Today"/><VisualState x:Name="RegularDay"/></VisualStateGroup>
+          <VisualStateGroup x:Name="BlackoutDayStates"><VisualState x:Name="BlackoutDay"/><VisualState x:Name="NormalDay"/></VisualStateGroup>
+          <VisualStateGroup x:Name="CalendarButtonFocusStates"><VisualState x:Name="CalendarButtonFocused"/><VisualState x:Name="CalendarButtonUnfocused"/></VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid x:Name="Surface" RenderTransformOrigin=".5,.5"><Grid.RenderTransform><ScaleTransform/></Grid.RenderTransform>
+          <Grid x:Name="DayContent">
+            <Border x:Name="TodayOutline" BorderBrush="{DynamicResource Primary}" BorderThickness="1" CornerRadius="20" Opacity="0"/>
+            <Border x:Name="SelectedFill" Background="{DynamicResource Primary}" CornerRadius="20" Opacity="0"/>
+            <Border x:Name="FocusHalo" Background="{DynamicResource Primary}" CornerRadius="20" Opacity="0"/>
+            <Border x:Name="State" Background="{TemplateBinding Foreground}" CornerRadius="20" Opacity="0"/>
+            <Canvas x:Name="RippleHost" IsHitTestVisible="False"/>
+            <TextBlock x:Name="NormalText" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource OnSurface}"/>
+            <TextBlock x:Name="SelectedText" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource OnPrimary}" Opacity="0"/>
+          </Grid>
+        </Grid>
+      </Grid><ControlTemplate.Triggers><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.38"/></Trigger></ControlTemplate.Triggers>
+    </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="MaterialMonth" TargetType="CalendarButton">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/><Setter Property="local:Motion.Interactive" Value="True"/><Setter Property="local:CalendarMotion.Enabled" Value="True"/>
+    <Setter Property="Height" Value="64"/><Setter Property="Margin" Value="4"/><Setter Property="FontSize" Value="{DynamicResource BodySize}"/><Setter Property="Foreground" Value="{DynamicResource Primary}"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CalendarButton">
+      <Grid x:Name="StateRoot" Background="Transparent">
+        <VisualStateManager.VisualStateGroups>
+          <VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal"/><VisualState x:Name="MouseOver"/><VisualState x:Name="Pressed"/><VisualState x:Name="Disabled"/></VisualStateGroup>
+          <VisualStateGroup x:Name="SelectionStates"><VisualState x:Name="Selected"/><VisualState x:Name="Unselected"/></VisualStateGroup>
+          <VisualStateGroup x:Name="ActiveStates"><VisualState x:Name="Active"/><VisualState x:Name="Inactive"/></VisualStateGroup>
+          <VisualStateGroup x:Name="CalendarButtonFocusStates"><VisualState x:Name="CalendarButtonFocused"/><VisualState x:Name="CalendarButtonUnfocused"/></VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid x:Name="Surface" RenderTransformOrigin=".5,.5"><Grid.RenderTransform><ScaleTransform/></Grid.RenderTransform>
+          <Grid x:Name="DayContent">
+            <Border x:Name="SelectedFill" Background="{DynamicResource Primary}" CornerRadius="16" Opacity="0"/>
+            <Border x:Name="FocusHalo" Background="{DynamicResource Primary}" CornerRadius="16" Opacity="0"/>
+            <Border x:Name="State" Background="{TemplateBinding Foreground}" CornerRadius="16" Opacity="0"/>
+            <Canvas x:Name="RippleHost" IsHitTestVisible="False"/>
+            <TextBlock x:Name="NormalText" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource OnSurface}"/>
+            <TextBlock x:Name="SelectedText" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource OnPrimary}" Opacity="0"/>
+          </Grid>
+        </Grid>
+      </Grid><ControlTemplate.Triggers><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.38"/></Trigger></ControlTemplate.Triggers>
+    </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="MaterialCalendarItem" TargetType="CalendarItem">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="CalendarItem">
+      <ControlTemplate.Resources><DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}"><TextBlock Text="{Binding}" Foreground="{DynamicResource Muted}" FontSize="{DynamicResource SmallSize}" HorizontalAlignment="Center" VerticalAlignment="Center"/></DataTemplate></ControlTemplate.Resources>
+      <Grid x:Name="PART_Root"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+        <Grid Margin="4,0,4,12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="44"/><ColumnDefinition Width="44"/></Grid.ColumnDefinitions>
+          <Button x:Name="PART_HeaderButton" Style="{DynamicResource {x:Type Button}}" HorizontalContentAlignment="Left" Foreground="{DynamicResource OnSurface}" Padding="12,8" AutomationProperties.Name="切换月份或年份视图"/>
+          <Button x:Name="PART_PreviousButton" Grid.Column="1" Style="{DynamicResource IconButton}" AutomationProperties.Name="上一页"><local:Icon Kind="left"/></Button>
+          <Button x:Name="PART_NextButton" Grid.Column="2" Style="{DynamicResource IconButton}" AutomationProperties.Name="下一页"><local:Icon Kind="right"/></Button>
+        </Grid>
+        <Grid x:Name="PART_MonthView" Grid.Row="1" KeyboardNavigation.TabNavigation="Once" KeyboardNavigation.DirectionalNavigation="Contained">
+          <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+          <Grid.RowDefinitions><RowDefinition Height="32"/><RowDefinition Height="44"/><RowDefinition Height="44"/><RowDefinition Height="44"/><RowDefinition Height="44"/><RowDefinition Height="44"/><RowDefinition Height="44"/></Grid.RowDefinitions>
+        </Grid>
+        <Grid x:Name="PART_YearView" Grid.Row="1" Visibility="Hidden" KeyboardNavigation.TabNavigation="Once" KeyboardNavigation.DirectionalNavigation="Contained">
+          <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+          <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+        </Grid>
+        <Border x:Name="PART_DisabledVisual" Grid.RowSpan="2" Background="{DynamicResource Surface}" Opacity="0.5" Visibility="Collapsed" CornerRadius="16"/>
+      </Grid>
+      <ControlTemplate.Triggers>
+        <Trigger Property="IsEnabled" Value="False"><Setter TargetName="PART_DisabledVisual" Property="Visibility" Value="Visible"/></Trigger>
+        <DataTrigger Binding="{Binding DisplayMode,RelativeSource={RelativeSource AncestorType=Calendar}}" Value="Year"><Setter TargetName="PART_MonthView" Property="Visibility" Value="Hidden"/><Setter TargetName="PART_YearView" Property="Visibility" Value="Visible"/></DataTrigger>
+        <DataTrigger Binding="{Binding DisplayMode,RelativeSource={RelativeSource AncestorType=Calendar}}" Value="Decade"><Setter TargetName="PART_MonthView" Property="Visibility" Value="Hidden"/><Setter TargetName="PART_YearView" Property="Visibility" Value="Visible"/></DataTrigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="MaterialCalendar" TargetType="Calendar">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/><Setter Property="local:CalendarMotion.Enabled" Value="True"/>
+    <Setter Property="CalendarDayButtonStyle" Value="{StaticResource MaterialDay}"/><Setter Property="CalendarButtonStyle" Value="{StaticResource MaterialMonth}"/><Setter Property="CalendarItemStyle" Value="{StaticResource MaterialCalendarItem}"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Calendar">
+      <Grid x:Name="PART_Root" Margin="8"><Border x:Name="CalendarSurface" Background="{DynamicResource Raised}" CornerRadius="28" Padding="16" local:Motion.EnterOnLoad="True">
+        <Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="3" Opacity="0.16"/></Border.Effect>
+        <StackPanel>
+          <TextBlock Text="选择日期" FontSize="{DynamicResource SmallSize}" Foreground="{DynamicResource Muted}" Margin="12,4,0,8"/>
+          <TextBlock Text="{Binding SelectedDate,RelativeSource={RelativeSource TemplatedParent},StringFormat={}{0:yyyy年M月d日},TargetNullValue=选择截止日期}" FontSize="{DynamicResource HeadingSize}" FontWeight="Medium" Margin="12,0,0,16"/>
+          <CalendarItem x:Name="PART_CalendarItem" Style="{TemplateBinding CalendarItemStyle}" Width="308"/>
+        </StackPanel>
+      </Border></Grid>
+    </ControlTemplate></Setter.Value></Setter>
+  </Style>
+</ResourceDictionary>

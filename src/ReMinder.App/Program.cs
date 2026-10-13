@@ -21,6 +21,7 @@ public static class Program
             catch (Exception e) { Log.Write("unregister-notifications", e); return 1; }
         }
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+        app.SessionEnding += (_, _) => { Motion.ShuttingDown = true; Motion.UpdatePreference(); };
         Theme.Apply(new AppSettings()); app.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/ReMinder;component/UI/Styles.xaml", UriKind.Relative) });
         app.DispatcherUnhandledException += (_, e) => { Log.Write("unhandled", e.Exception); e.Handled = true; MessageBox.Show("操作未能完成，任务数据已保留。\n" + e.Exception.Message, "Re:minder", MessageBoxButton.OK, MessageBoxImage.Warning); };
         if (args.Contains("--panel"))

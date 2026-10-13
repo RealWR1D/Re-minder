@@ -22,7 +22,7 @@ internal sealed class PanelRuntime : IDisposable
         this.token = token; this.corePid = corePid; this.qa = qa;
         pipe = new NamedPipeClientStream(".", name, PipeDirection.InOut, PipeOptions.Asynchronous);
         model = new PanelViewModel(message => { Native.AllowSetForegroundWindow((uint)corePid); _ = Send(message); }); view = new PanelView { DataContext = model };
-        var border = new Border { Child = view, Margin = new Thickness(12), Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 3, Opacity = .12 } };
+        var border = new Border { Child = view, Margin = new Thickness(FrameWindow.SurfaceInsetDip), Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 3, Opacity = .12 } };
         window = new Window { Title = "Re:minder", Content = border, WindowStyle = WindowStyle.None, AllowsTransparency = true, Background = Brushes.Transparent, ResizeMode = ResizeMode.NoResize, SizeToContent = SizeToContent.WidthAndHeight, ShowInTaskbar = qa, ShowActivated = false };
         window.Loaded += (_, _) => Attach(); view.SizeChanged += (_, _) => { if (attached && !positioned) { positioned = true; window.Dispatcher.BeginInvoke(DispatcherPriority.Background, () => { Position(); positioned = false; }); } };
         clock.Tick += (_, _) => model.RefreshClock();
@@ -58,7 +58,7 @@ internal sealed class PanelRuntime : IDisposable
                     {
                         case "snapshot" when message.State is not null:
                             if (message.State.StateVersion < model.State.StateVersion) break;
-                            settings = message.State.Settings; Theme.Apply(settings); model.Apply(message.State);
+                            settings = message.State.Settings; Theme.Apply(settings); view.ApplySnapshot(message.State);
                             if (settings.PanelVisible) { if (!window.IsVisible) { window.Show(); Native.ShowWindow(new WindowInteropHelper(window).Handle, 4); } Position(); } else window.Hide();
                             break;
                         case "toast": view.ShowToast(message.Text, message.CanUndo); break;

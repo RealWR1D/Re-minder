@@ -12,7 +12,7 @@ internal sealed class LibraryWindow : FrameWindow
     public LibraryWindow(StateStore store, TaskService tasks, Action<DeadlineTask> edit, Action<string, bool> toast) : base("任务记录", 460)
     {
         this.store = store; this.tasks = tasks; this.edit = edit; this.toast = toast;
-        Body.Children.Add(filter); Body.Children.Add(search); Body.Children.Add(list); search.TextChanged += (_, _) => Refresh(); filter.SelectionChanged += (_, _) => Refresh();
+        Body.Children.Add(filter); Body.Children.Add(search); Body.Children.Add(list); search.TextChanged += (_, _) => Refresh(); filter.SelectionChanged += (_, _) => { Refresh(); if (IsLoaded) Motion.Appear(list, Motion.Content, 4); };
         store.Changed += Changed; Closed += (_, _) => store.Changed -= Changed; Refresh();
     }
     private void Changed() => Dispatcher.InvokeAsync(Refresh);

@@ -11,6 +11,12 @@ if ($LASTEXITCODE -ne 0) { throw 'Restore failed.' }
 if (-not $SkipChecks) {
     & $sdk run --project 'tests/ReMinder.Checks' -c Release
     if ($LASTEXITCODE -ne 0) { throw 'Checks failed.' }
+    & $sdk restore 'tests/ReMinder.MotionChecks' --locked-mode
+    if ($LASTEXITCODE -ne 0) { throw 'Motion checks restore failed.' }
+    & $sdk build 'tests/ReMinder.MotionChecks' -c Release --no-restore -m:1 -nodeReuse:false
+    if ($LASTEXITCODE -ne 0) { throw 'Motion checks build failed.' }
+    & './tests/ReMinder.MotionChecks/bin/Release/net10.0-windows10.0.19041.0/win-x64/ReMinder.MotionChecks.exe'
+    if ($LASTEXITCODE -ne 0) { throw 'Motion checks failed.' }
 }
 & $sdk publish 'src/ReMinder.App' -c Release --no-restore -o 'artifacts/ReMinder-win-x64'
 if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }

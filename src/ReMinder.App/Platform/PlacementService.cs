@@ -1,10 +1,13 @@
 using System.Windows.Interop;
+using ReMinder.App.UI;
 using Forms = System.Windows.Forms;
 
 namespace ReMinder.App.Platform;
 
 internal static class PlacementService
 {
+    // Window coordinates include the transparent shadow margin; settings describe the visible surface.
+    internal static int SurfaceTop(int workTop, int topMarginDip, double scale) => Math.Max(workTop, workTop + (int)Math.Round((topMarginDip - FrameWindow.SurfaceInsetDip) * scale));
     public static Forms.Screen Screen(AppSettings settings) => Forms.Screen.AllScreens.FirstOrDefault(s => s.DeviceName == settings.MonitorPreference) ?? Forms.Screen.PrimaryScreen ?? Forms.Screen.AllScreens[0];
     public static double Scale(Forms.Screen screen)
     {
@@ -25,7 +28,7 @@ internal static class PlacementService
         var width = (int)Math.Ceiling((settings.PanelWidthDip + 24) * scale);
         var height = (int)Math.Ceiling(Math.Min(window.ActualHeight * wpfScale, work.Height - 24 * scale));
         var x = work.Right - (int)Math.Round((settings.RightMarginDip + settings.PanelWidthDip + 12) * scale);
-        var y = work.Top + (int)Math.Round((settings.TopMarginDip - 12) * scale);
+        var y = SurfaceTop(work.Top, settings.TopMarginDip, scale);
         x = Math.Clamp(x, work.Left, Math.Max(work.Left, work.Right - width));
         y = Math.Clamp(y, work.Top, Math.Max(work.Top, work.Bottom - height));
         var point = new Native.Point(x, y);
@@ -37,20 +40,21 @@ internal static class PlacementService
         using var physical = new Native.PhysicalCoordinates();
         var screen = Screen(settings); var work = screen.WorkingArea; var scale = Scale(screen);
         window.WindowStartupLocation = WindowStartupLocation.Manual;
-        window.MaxHeight = Math.Max(240, work.Height / scale - 32);
+        var top = SurfaceTop(work.Top, settings.TopMarginDip, scale);
+        window.MaxHeight = Math.Max(240, Math.Min(work.Height / scale - 32, (work.Bottom - top) / scale));
         window.Width = Math.Max(240, Math.Min(window.Width, work.Width / scale - 24));
         var width = window.Width;
         var right = work.Right / scale - settings.RightMarginDip - settings.PanelWidthDip - 16;
         window.Left = Math.Max(work.Left / scale + 12, right - width);
-        window.Top = work.Top / scale + settings.TopMarginDip;
+        window.Top = top / scale;
         window.Loaded += (_, _) =>
         {
             using var coordinates = new Native.PhysicalCoordinates();
             var handle = new WindowInteropHelper(window).Handle;
             var pixelWidth = (int)Math.Ceiling(window.Width * scale);
-            var pixelHeight = (int)Math.Ceiling(Math.Min(window.ActualHeight * scale, work.Height - 24 * scale));
+            var pixelHeight = (int)Math.Ceiling(Math.Min(window.ActualHeight * scale, window.MaxHeight * scale));
             var x = Math.Clamp(work.Right - (int)Math.Round((settings.RightMarginDip + settings.PanelWidthDip + 16) * scale) - pixelWidth, work.Left, Math.Max(work.Left, work.Right - pixelWidth));
-            var y = Math.Clamp(work.Top + (int)Math.Round(settings.TopMarginDip * scale), work.Top, Math.Max(work.Top, work.Bottom - pixelHeight));
+            var y = Math.Clamp(top, work.Top, Math.Max(work.Top, work.Bottom - pixelHeight));
             Native.SetWindowPos(handle, IntPtr.Zero, x, y, pixelWidth, pixelHeight, Native.SWP_NOACTIVATE | Native.SWP_NOZORDER);
         };
     }

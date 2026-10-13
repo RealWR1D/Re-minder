@@ -11,7 +11,8 @@ public static class Theme
     {
         var light = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1);
         Dark = settings.ThemeMode == "dark" || settings.ThemeMode == "system" && Convert.ToInt32(light) == 0;
-        Reduced = settings.ReduceMotion || !SystemParameters.ClientAreaAnimation;
+        var reduced = settings.ReduceMotion || !SystemParameters.ClientAreaAnimation || SystemParameters.HighContrast;
+        if (Reduced != reduced) { Reduced = reduced; Motion.UpdatePreference(); }
         var textScale = Math.Clamp(Convert.ToDouble(Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Accessibility", "TextScaleFactor", 100)) / 100, 1, 2.25);
         var nextSignature = $"{Dark}|{settings.PaletteId}|{SystemParameters.HighContrast}|{textScale}";
         if (signature == nextSignature) return;

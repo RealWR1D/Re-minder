@@ -12,6 +12,17 @@ design-*.md
 *-acceptance-report.md
 artifacts/qa-*/
 artifacts/ReMinder-win-x64/
+artifacts/ReMinder-motion-win-x64/
+artifacts/ReMinder-motion-v2-win-x64/
+artifacts/ReMinder-motion-v3-win-x64/
+artifacts/ReMinder-motion-v4-win-x64/
+artifacts/ReMinder-motion-v5-win-x64/
+artifacts/ReMinder-motion-v6-win-x64/
+artifacts/ReMinder-0.2.0-win-x64/
+artifacts/release-staging/
+artifacts/motion-review-v5/
+artifacts/motion-v6-checks/test-data/
+artifacts/motion-checks/test-data/
 artifacts/*.zip
 **/bin/
 **/obj/

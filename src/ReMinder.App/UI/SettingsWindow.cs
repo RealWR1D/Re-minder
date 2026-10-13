@@ -38,7 +38,7 @@ internal sealed class SettingsWindow : FrameWindow
         if (!string.IsNullOrEmpty(store.RecoveryNotice)) Body.Children.Add(new TextBlock { Text = store.RecoveryNotice, TextWrapping = TextWrapping.Wrap });
         error.SetResourceReference(TextBlock.ForegroundProperty, "Error"); error.TextWrapping = TextWrapping.Wrap; Body.Children.Add(error);
         var footer = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 20, 0, 0) }; footer.Children.Add(Controls.Button("关闭", Close)); footer.Children.Add(Controls.Button("保存设置", () => Controls.Safely(Save, ShowError), "PrimaryButton", "check")); Body.Children.Add(footer);
-        Body.Children.Add(new TextBlock { Text = "Re:minder 0.1.0 · Windows 桌面版\n退出后不再检查提醒；睡眠期间的提醒会在恢复时合并处理。", TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 16, 0, 0), FontSize = 12 });
+        Body.Children.Add(new TextBlock { Text = $"Re:minder {typeof(SettingsWindow).Assembly.GetName().Version?.ToString(3)} · Windows 桌面版\n退出后不再检查提醒；睡眠期间的提醒会在恢复时合并处理。", TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 16, 0, 0), FontSize = 12 });
     }
     private static ComboBox Choice(string[] values, int selected) => new() { ItemsSource = values, SelectedIndex = Math.Max(0, selected), MinHeight = 40 };
     public void UpdateHostStatus(string text) => hostLabel.Text = text;

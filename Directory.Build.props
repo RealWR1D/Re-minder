@@ -5,7 +5,8 @@
     <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Company>Re:minder</Company>
     <Product>Re:minder</Product>
     <Authors>Re:minder</Authors>

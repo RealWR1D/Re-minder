@@ -1,11 +1,14 @@
 {
+  "version": "0.2.0",
+  "sourceTag": "v0.2.0",
+  "target": "Windows 11 x64",
+  "generatedUtc": "2026-10-13T15:49:54.9578040+00:00",
+  "archive": "ReMinder-0.2.0-win-x64.zip",
+  "sha256": "c5a1091f2b6dd1c8d23642f6b7126c7e64d7dc724268620c32fd5a2040a15eab",
+  "bytes": 129199181,
+  "assemblySha256": "E94EE605190E8B54C7B0FDC1FFF5F20D7A6D16F7C9A593F0C0BC3E42197783A8",
+  "verifiedBuildMatchesPublish": true,
   "domainChecksPassed": 14,
-  "archive": "ReMinder-0.1.0-win-x64.zip",
-  "windowsBuild": "26300",
-  "dpi": 120,
-  "generatedUtc": "2026-10-12T11:35:46.5166625+00:00",
-  "sha256": "fa6740614852c4afc6ef147786935d45ab9b5274ea6a45da64f9222182548ed4",
-  "bytes": 129198086,
-  "target": "Windows x64",
-  "version": "0.1.0"
+  "motionChecksPassed": 128,
+  "windowsBuild": 26300
 }

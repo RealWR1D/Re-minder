@@ -1,0 +1,31 @@
+{
+  "generatedUtc": "2026-10-13T15:49:54.9578040+00:00",
+  "motionRevision": 6,
+  "motionChecksPassed": 128,
+  "domainChecksPassed": 14,
+  "publishDirectory": "artifacts/ReMinder-0.2.0-win-x64",
+  "assemblySha256": "E94EE605190E8B54C7B0FDC1FFF5F20D7A6D16F7C9A593F0C0BC3E42197783A8",
+  "verifiedBuildMatchesPublish": true,
+  "pressScale": 0.985,
+  "pressMilliseconds": 96,
+  "releaseMilliseconds": 216,
+  "windowEnterMilliseconds": 264,
+  "calendarPageMilliseconds": 180,
+  "calendarPageDistanceDip": 12,
+  "editorFieldReplaceMilliseconds": 150,
+  "completionCheckMilliseconds": 120,
+  "completionExitMilliseconds": 160,
+  "completionReflowHoldMilliseconds": 120,
+  "scrollMinimumMilliseconds": 160,
+  "scrollMaximumMilliseconds": 280,
+  "separateToastRow": true,
+  "editorActionsFixed": true,
+  "nativeQaVerified": [
+    "completion check/fade",
+    "toast above new-task action",
+    "fixed editor actions",
+    "calendar month highlight"
+  ],
+  "performanceFrameTimingMeasured": false,
+  "version": "0.2.0"
+}

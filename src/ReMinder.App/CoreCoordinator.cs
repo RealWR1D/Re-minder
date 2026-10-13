@@ -13,11 +13,12 @@ internal sealed class CoreCoordinator : IDisposable
     private TrayService? tray; private bool ready, exiting;
     private string lastMode = "";
     private SettingsWindow? settingsWindow; private LibraryWindow? library; private ReminderWindow? reminderWindow; private FrameWindow? menu;
-    private readonly Dictionary<string, EditorWindow> editors = new();
+    private readonly EditorSession editors;
     private readonly Queue<Dictionary<string, string>> activationQueue = new();
     public CoreCoordinator(string directory, bool qa)
     {
         store = new StateStore(directory); tasks = new TaskService(store); reminders = new ReminderService(store, notifications); panel = new PanelSupervisor(store, directory, qa);
+        editors = new EditorSession(store, tasks, editor => Show(editor), (text, undo) => Toast(text, undo));
         Log.DirectoryPath = directory; notifications.Invoked += OnNotification; panel.Command += message => Controls.Safely(() => Execute(message)); reminders.Error += text => Toast(text);
         panel.StatusChanged += () => settingsWindow?.UpdateHostStatus(panel.Status);
     }
@@ -55,8 +56,8 @@ internal sealed class CoreCoordinator : IDisposable
         Log.Write("command-" + message.Action);
         switch (message.Action)
         {
-            case "new": OpenEditor(null); break;
-            case "edit": var task = store.Snapshot.Tasks.FirstOrDefault(t => t.Id == message.TaskId && t.Status != TaskStatus.Deleted); if (task is not null) OpenEditor(task); else Toast("任务已不存在或已删除"); break;
+            case "new": await editors.OpenAsync(null); break;
+            case "edit": await editors.OpenAsync(message.TaskId); break;
             case "complete": await tasks.SetStatusAsync(message.TaskId, TaskStatus.Completed, message.ExpectedVersion); Toast("任务已完成", true); break;
             case "undo": await tasks.UndoAsync(); Toast("已撤销"); break;
             case "history": OpenHistory(); break;
@@ -68,16 +69,12 @@ internal sealed class CoreCoordinator : IDisposable
             case "show": if (!panel.Running) panel.Retry(); await Settings(s => s with { PanelVisible = true }); await panel.SendAsync(new WireMessage { Kind = "focus" }); break;
             case "topmost": await Settings(s => s with { WindowMode = s.WindowMode == "topmost" ? "desktop" : "topmost" }); menu?.Close(); break;
             case "retry-desktop": panel.Retry(); menu?.Close(); break;
-            case "exit": Application.Current.Shutdown(); break;
+            case "exit": Motion.ShuttingDown = true; Motion.UpdatePreference(); Application.Current.Shutdown(); break;
         }
     }
     private Task Settings(Func<AppSettings, AppSettings> update) => store.CommitAsync(s => { var settings = update(s.Settings); if (settings == s.Settings) return false; s.Settings = settings; return true; });
     private void Show(Window window) { PlacementService.Input(window, store.Snapshot.Settings); window.Show(); Native.ShowWindow(new System.Windows.Interop.WindowInteropHelper(window).Handle, 9); window.Activate(); }
-    private void OpenEditor(DeadlineTask? task)
-    {
-        var key = task?.Id ?? "new"; if (editors.TryGetValue(key, out var existing)) { existing.Activate(); return; }
-        var editor = new EditorWindow(tasks, store.Snapshot.Settings, task); editors.Add(key, editor); editor.Closed += (_, _) => { editors.Remove(key); if (editor.WasDeleted) Toast("任务已移入最近删除", true); else if (editor.WasSaved) Toast(task is null ? "任务已添加" : "任务已保存"); }; Show(editor);
-    }
+    private void OpenEditor(DeadlineTask task) => Controls.Safely(() => editors.OpenAsync(task.Id));
     private void OpenHistory() { if (library is not null) { library.Activate(); return; } library = new LibraryWindow(store, tasks, OpenEditor, Toast); library.Closed += (_, _) => library = null; Show(library); }
     private void OpenReminders() { if (reminderWindow is not null) { reminderWindow.Activate(); return; } reminderWindow = new ReminderWindow(store, reminders, OpenEditor); reminderWindow.Closed += (_, _) => reminderWindow = null; Show(reminderWindow); }
     private void OpenSettings() { if (settingsWindow is not null) { settingsWindow.Activate(); return; } settingsWindow = new SettingsWindow(store, tasks, notifications, panel.Status); settingsWindow.Closed += (_, _) => settingsWindow = null; Show(settingsWindow); }
@@ -93,7 +90,7 @@ internal sealed class CoreCoordinator : IDisposable
         var action = args.GetValueOrDefault("action", "open"); if (action is "reminders" or "settings") { await Execute(new WireMessage { Action = action }); return; }
         var task = store.Snapshot.Tasks.FirstOrDefault(t => t.Id == args.GetValueOrDefault("taskId"));
         if (task is null || task.Status != TaskStatus.Pending || !int.TryParse(args.GetValueOrDefault("revision"), out var revision) || task.ScheduleRevision != revision) { Toast("这次提醒已失效，任务已更新或处理。"); return; }
-        if (action == "open") { await Settings(s => s with { PanelVisible = true }); await panel.SendAsync(new WireMessage { Kind = "focus", TaskId = task.Id }); OpenEditor(task); return; }
+        if (action == "open") { await Settings(s => s with { PanelVisible = true }); await panel.SendAsync(new WireMessage { Kind = "focus", TaskId = task.Id }); await editors.OpenAsync(task.Id); return; }
         var item = store.Snapshot.Reminders.FirstOrDefault(e => e.Id == args.GetValueOrDefault("eventId") && e.TaskId == task.Id && e.ScheduleRevision == revision);
         if (item is null || !int.TryParse(args.GetValueOrDefault("attempt"), out var attempt) || item.Attempts != attempt) { Toast("这次提醒已更新，请从提醒记录中操作。"); return; }
         if (action == "snooze10") await reminders.SnoozeAsync(item.Id, attempt);

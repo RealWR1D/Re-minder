@@ -8,7 +8,12 @@ public sealed class Icon : FrameworkElement
     public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(typeof(Icon), new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.Inherits | FrameworkPropertyMetadataOptions.AffectsRender));
     public string Kind { get => (string)GetValue(KindProperty); set => SetValue(KindProperty, value); }
     public Brush Foreground { get => (Brush)GetValue(ForegroundProperty); set => SetValue(ForegroundProperty, value); }
-    public Icon() { Width = Height = 20; Focusable = false; IsHitTestVisible = false; }
+    static Icon()
+    {
+        WidthProperty.OverrideMetadata(typeof(Icon), new FrameworkPropertyMetadata(20d));
+        HeightProperty.OverrideMetadata(typeof(Icon), new FrameworkPropertyMetadata(20d));
+    }
+    public Icon() { Focusable = false; IsHitTestVisible = false; }
     protected override void OnRender(DrawingContext dc)
     {
         base.OnRender(dc);
@@ -22,6 +27,8 @@ public sealed class Icon : FrameworkElement
             "arrow" => "M7,17 L17,7 M7,7 L17,7 L17,17",
             "down" => "M6,9 L12,15 L18,9",
             "up" => "M6,15 L12,9 L18,15",
+            "left" => "M15,6 L9,12 L15,18",
+            "right" => "M9,6 L15,12 L9,18",
             "restore" => "M4,8 L4,3 M4,8 L9,8 M4,8 A8,8 0 1 1 5,18",
             "trash" => "M4,6 L20,6 M9,6 L9,3 L15,3 L15,6 M6,6 L7,21 L17,21 L18,6 M10,10 L10,17 M14,10 L14,17",
             "calendar" => "M5,5 L19,5 Q21,5 21,7 L21,19 Q21,21 19,21 L5,21 Q3,21 3,19 L3,7 Q3,5 5,5 M3,10 L21,10 M7,3 L7,7 M17,3 L17,7",
